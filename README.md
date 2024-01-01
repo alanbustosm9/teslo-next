@@ -1,4 +1,4 @@
-# Peliculas App React-Native :fire:
+# Teslo Shop App with Next :fire:
 
 ## Developer :smiley: Alan Henry Bustos Mora
 
