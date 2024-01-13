@@ -9,3 +9,6 @@ export * from "./products/product-grid/ProductGridItem";
 export * from "./product/SizeSelector/SizeSelector";
 export * from "./product/QuantitySelector/QuantitySelector";
 export * from "./product/SlideShow/ProductSlideShow";
+export * from "./product/SlideShow/ProductMobileSlideShow";
+
+export * from "./ui/Footer/Footer";
