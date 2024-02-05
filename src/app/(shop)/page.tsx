@@ -1,10 +1,23 @@
-import { ProductGrid, Title } from "@/components";
-import { initialData } from "@/seed/seed";
+import { redirect } from "next/navigation";
+import { Pagination, ProductGrid, Title } from "@/components";
+import { getPaginationProductsWithImages } from "@/actions";
 
-// Temporal data
-const products = initialData.products;
+interface Props {
+  searchParams: {
+    page?: string;
+  };
+}
 
-export default function Home() {
+export default async function Home({ searchParams }: Props) {
+  const page = searchParams.page ? parseInt(searchParams.page) : 1;
+
+  const { products, currentPage, totalPages } =
+    await getPaginationProductsWithImages({ page });
+
+  if (products.length === 0) {
+    redirect("/");
+  }
+
   return (
     <>
       <Title
@@ -14,6 +27,8 @@ export default function Home() {
       />
 
       <ProductGrid products={products} />
+
+      <Pagination totalPages={totalPages} />
     </>
   );
 }
