@@ -1,5 +1,6 @@
 export const revalidate = 604800; // 7 days;
 
+import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 
 import {
@@ -16,6 +17,26 @@ import { getProductsBySlug } from "@/actions";
 interface Props {
   params: {
     slug: string;
+  };
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = params.slug;
+
+  const product = await getProductsBySlug(slug);
+
+  return {
+    title: product?.title,
+    description: product?.description,
+    openGraph: {
+      title: product?.title,
+      description: product?.description,
+      // todo: agregar el url de la imagen
+      images: [`/products/${product?.images[1]}`],
+    },
   };
 }
 
