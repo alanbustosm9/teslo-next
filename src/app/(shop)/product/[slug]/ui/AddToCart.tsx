@@ -3,13 +3,16 @@
 import { useState } from "react";
 
 import { QuantitySelector, SizeSelector } from "@/components";
-import { Product, Size } from "@/interfaces";
+import { CartProduct, Product, Size } from "@/interfaces";
+import { useCartStore } from "@/store";
 
 interface Props {
   product: Product;
 }
 
 export const AddToCart = ({ product }: Props) => {
+  const addProductToCart = useCartStore((state) => state.addProductToCart);
+
   const [size, setSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -20,6 +23,21 @@ export const AddToCart = ({ product }: Props) => {
       setError(true);
       return;
     }
+
+    const cartProduct: CartProduct = {
+      id: product.id,
+      slug: "",
+      title: "",
+      price: product.price,
+      quantity: quantity,
+      size: size,
+      image: product.images[0],
+    };
+
+    addProductToCart(cartProduct);
+
+    setSize(undefined);
+    setQuantity(1);
   };
 
   return (
