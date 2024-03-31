@@ -13,6 +13,12 @@ export const authConfig: NextAuthConfig = {
   },
 
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      console.log({ auth });
+
+      return true;
+    },
+
     jwt({ token, user }) {
       if (user) {
         token.data = user;
