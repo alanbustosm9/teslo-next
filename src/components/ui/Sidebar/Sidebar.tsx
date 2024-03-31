@@ -25,8 +25,6 @@ export const Sidebar = () => {
 
   const isAdmin = session?.user?.role === "admin";
 
-  console.log({ isAdmin });
-
   return (
     <div>
       {/* Black BG */}
