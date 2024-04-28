@@ -3,7 +3,12 @@
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
 
-import type { Country } from "@/interfaces";
+import type { Address, Country } from "@/interfaces";
+import { useAddressStore } from "@/store";
+import { useEffect } from "react";
+import { deleteUserAddress, setUserAddress } from "@/actions";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface FormInputs {
   firstName: string;
@@ -19,21 +24,51 @@ interface FormInputs {
 
 interface Props {
   countries: Country[];
+  userStoredAddress?: Partial<Address>;
 }
 
-export const AddressForm = ({ countries }: Props) => {
+export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
+  const router = useRouter();
+
   const {
     handleSubmit,
     register,
     formState: { isValid },
+    reset,
   } = useForm<FormInputs>({
     defaultValues: {
-      // todo: leer de la bd
+      ...userStoredAddress,
+      rememberAddress: false,
     },
   });
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const setAddress = useAddressStore((state) => state.setAddress);
+  const address = useAddressStore((state) => state.address);
+
+  const { data: session } = useSession({
+    required: true,
+  });
+
+  useEffect(() => {
+    if (address.firstName) {
+      reset(address);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onSubmit = async (data: FormInputs) => {
+    setAddress(data);
+
+    const { rememberAddress, ...address } = data;
+
+    if (data.rememberAddress) {
+      await setUserAddress(address, session!.user?.id);
+    } else {
+      await deleteUserAddress(session!.user?.id);
+    }
+
+    router.push("/checkout");
   };
 
   return (
