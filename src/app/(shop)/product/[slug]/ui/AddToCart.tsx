@@ -19,15 +19,14 @@ export const AddToCart = ({ product }: Props) => {
   const [error, setError] = useState(false);
 
   const addToCart = () => {
-    if (!size) {
-      setError(true);
-      return;
-    }
+    setError(true);
+
+    if (!size) return;
 
     const cartProduct: CartProduct = {
       id: product.id,
-      slug: "",
-      title: "",
+      slug: product.slug,
+      title: product.title,
       price: product.price,
       quantity: quantity,
       size: size,
@@ -35,9 +34,9 @@ export const AddToCart = ({ product }: Props) => {
     };
 
     addProductToCart(cartProduct);
-
-    setSize(undefined);
+    setError(false);
     setQuantity(1);
+    setSize(undefined);
   };
 
   return (

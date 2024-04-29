@@ -5,6 +5,7 @@ import { QuantitySelector } from "@/components";
 import { useCartStore } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const ProductsInCart = () => {
   const productsInCart = useCartStore((state) => state.cart);
@@ -27,10 +28,17 @@ export const ProductsInCart = () => {
     return <div>Loading...</div>;
   }
 
+  if (productsInCart.length === 0) {
+    redirect("/empty");
+  }
+
   return (
     <>
       {productsInCart.map((product) => (
-        <div key={`${product.slug}-${product.id}`} className="flex mb-5">
+        <div
+          key={`${product.slug}-${product.id}-${product.size}`}
+          className="flex mb-5"
+        >
           <Image
             src={`/products/${product.image}`}
             width={100}
@@ -44,7 +52,7 @@ export const ProductsInCart = () => {
               href={`/product/${product.slug}`}
               className="hover:underline cursor-pointer"
             >
-              <p>{product.title}</p>
+              {product.size} - {product.title}
             </Link>
             <p>${product.price}</p>
             <QuantitySelector
