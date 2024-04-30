@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import clsx from "clsx";
 import Link from "next/link";
+
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
-import clsx from "clsx";
+import { placeOrder } from "@/actions";
 
 export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
@@ -30,6 +32,9 @@ export const PlaceOrder = () => {
       quantity: product.quantity,
       size: product.size,
     }));
+
+
+    const resp = await placeOrder(productsToOrder, address)
 
     setDisabled(false);
   };
