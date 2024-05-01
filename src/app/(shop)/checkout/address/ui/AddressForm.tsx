@@ -15,7 +15,7 @@ interface FormInputs {
   lastName: string;
   address: string;
   address2: string;
-  zipCode: string;
+  postalCode: string;
   city: string;
   country: string;
   phone: string;
@@ -58,14 +58,14 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   }, []);
 
   const onSubmit = async (data: FormInputs) => {
-    const { rememberAddress, ...address } = data;
+    const { rememberAddress, ...restAddress } = data;
 
-    setAddress(address);
+    setAddress(restAddress);
 
     if (rememberAddress) {
-      await setUserAddress(address, session!.user?.id);
+      await setUserAddress(restAddress, session!.user.id);
     } else {
-      await deleteUserAddress(session!.user?.id);
+      await deleteUserAddress(session!.user.id);
     }
 
     router.push("/checkout");
@@ -117,7 +117,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
-          {...register("zipCode", { required: true })}
+          {...register("postalCode", { required: true })}
         />
       </div>
 
@@ -191,7 +191,6 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
         <button
           disabled={!isValid}
           type="submit"
-          //   className="btn-primary flex w-full sm:w-1/2 justify-center "
           className={clsx({
             "btn-primary": isValid,
             "btn-disabled": !isValid,

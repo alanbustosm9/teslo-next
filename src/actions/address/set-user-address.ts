@@ -9,14 +9,13 @@ export const setUserAddress = async (address: Address, userId: string) => {
 
     return {
       ok: true,
-      message: "Dirección guardada correctamente",
       address: newAddress,
     };
   } catch (error) {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo guardar la dirección del usuario",
+      message: "No se pudo grabar la dirección",
     };
   }
 };
@@ -24,21 +23,19 @@ export const setUserAddress = async (address: Address, userId: string) => {
 const createOrReplaceAddress = async (address: Address, userId: string) => {
   try {
     const storedAddress = await prisma.userAddress.findUnique({
-      where: {
-        userId,
-      },
+      where: { userId },
     });
 
     const addressToSave = {
-      firstName: address.firstName,
-      lastName: address.lastName,
+      userId: userId,
       address: address.address,
       address2: address.address2,
-      zipCode: address.zipCode,
       countryId: address.country,
-      phone: address.phone,
       city: address.city,
-      userId: userId,
+      firstName: address.firstName,
+      lastName: address.lastName,
+      phone: address.phone,
+      postalCode: address.postalCode,
     };
 
     if (!storedAddress) {
@@ -50,15 +47,13 @@ const createOrReplaceAddress = async (address: Address, userId: string) => {
     }
 
     const updatedAddress = await prisma.userAddress.update({
-      where: {
-        userId,
-      },
+      where: { userId },
       data: addressToSave,
     });
 
     return updatedAddress;
   } catch (error) {
     console.log(error);
-    throw new Error("No se pudo guardar la dirección del usuario");
+    throw new Error("No se pudo grabar la dirección");
   }
 };

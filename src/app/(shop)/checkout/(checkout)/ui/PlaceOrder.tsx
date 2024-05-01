@@ -1,16 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import Link from "next/link";
 
 import { useAddressStore, useCartStore } from "@/store";
-import { currencyFormat } from "@/utils";
+import { currencyFormat, sleep } from "@/utils";
 import { placeOrder } from "@/actions";
 
 export const PlaceOrder = () => {
+  const router = useRouter();
+
   const [loaded, setLoaded] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const address = useAddressStore((state) => state.address);
 
@@ -19,6 +22,7 @@ export const PlaceOrder = () => {
   );
 
   const cart = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   useEffect(() => {
     setLoaded(true);
@@ -28,15 +32,20 @@ export const PlaceOrder = () => {
     setDisabled(true);
 
     const productsToOrder = cart.map((product) => ({
-      id: product.id,
+      productId: product.id,
       quantity: product.quantity,
       size: product.size,
     }));
 
+    const resp = await placeOrder(productsToOrder, address);
+    if (!resp.ok) {
+      setDisabled(false);
+      setErrorMessage(resp.message);
+      return;
+    }
 
-    const resp = await placeOrder(productsToOrder, address)
-
-    setDisabled(false);
+    clearCart();
+    router.replace("/orders/" + resp.order?.id);
   };
 
   if (!loaded) {
@@ -47,15 +56,16 @@ export const PlaceOrder = () => {
   return (
     <div className="bg-white rounded-xl shadow-xl p-7">
       <h2 className="text-2xl mb-2">Dirección de entrega</h2>
+      {/* TODO: HACER COMPONENTE REUTILIZABLE DE ESTO */}
       <div className="mb-10">
         <p className="text-xl">
           {address.firstName} {address.lastName}
         </p>
         <p>{address.address}</p>
         <p>{address.address2}</p>
-        <p>{address.zipCode}</p>
+        <p>{address.postalCode}</p>
         <p>
-          {address.city} - {address.country}
+          {address.city}, {address.country}
         </p>
         <p>{address.phone}</p>
       </div>
@@ -65,6 +75,7 @@ export const PlaceOrder = () => {
 
       {/* Checkout */}
 
+      {/* TODO: HACER COMPONENTE REUTILIZABLE DE ESTO */}
       <h2 className="text-2xl mb-2">Resumen de orden</h2>
 
       <div className="grid grid-cols-2">
@@ -100,15 +111,14 @@ export const PlaceOrder = () => {
           </span>
         </p>
 
-        <p className="text-red-500 mb-1">Error en la creación</p>
+        <p className="text-red-500 mb-1">{errorMessage}</p>
+
         <button
           onClick={onPlaceOrder}
           className={clsx({
             "btn-primary": !disabled,
             "btn-disabled": disabled,
           })}
-
-          // href="/orders/123"
         >
           Colocar orden
         </button>
