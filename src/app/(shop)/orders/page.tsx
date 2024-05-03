@@ -68,10 +68,8 @@ export default async function () {
                     </>
                   ) : (
                     <>
-                      <td className="flex items-center text-sm  text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                        <IoCardOutline className="text-red-800" />
-                        <span className="mx-2 text-red-800">No Pagada</span>
-                      </td>
+                      <IoCardOutline className="text-red-800" />
+                      <span className="mx-2 text-red-800">No Pagada</span>
                     </>
                   )}
                 </td>
