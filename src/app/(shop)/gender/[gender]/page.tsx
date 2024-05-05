@@ -2,14 +2,14 @@ export const revalidate = 60;
 
 import { notFound, redirect } from "next/navigation";
 
-import { Category } from "@/interfaces";
+import { GenderCategory } from "@/interfaces";
 import { Pagination, ProductGrid, Title } from "@/components";
 import { getPaginationProductsWithImages } from "@/actions";
 import { Gender } from "@prisma/client";
 
 interface Props {
   params: {
-    gender: Category;
+    gender: GenderCategory;
   };
   searchParams: {
     page?: string;
@@ -26,7 +26,6 @@ export default async function ({ params, searchParams }: Props) {
 
   if (products.length === 0) {
     redirect("/");
-    // redirect(`/gender/${gender}`)
   }
 
   const labels: Record<string, string> = {

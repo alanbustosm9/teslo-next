@@ -45,6 +45,8 @@ export const PlaceOrder = () => {
     }
 
     clearCart();
+
+    //TODO VER ESTO
     router.replace("/orders/" + resp.order?.id);
   };
 
