@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import Image from "next/image";
 
 import { useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
+import { ProductImage } from "@/components";
 
 export const ProductsInCart = () => {
   const productsInCart = useCartStore((state) => state.cart);
@@ -31,8 +31,8 @@ export const ProductsInCart = () => {
           key={`${product.slug}-${product.id}-${product.size}`}
           className="flex mb-5"
         >
-          <Image
-            src={`/products/${product.image}`}
+          <ProductImage
+            src={`${product.image}`}
             width={100}
             height={100}
             alt={product.title}

@@ -12,7 +12,7 @@ import {
 } from "@/components";
 
 import { titleFont } from "@/config/fonts";
-import { getProductsBySlug } from "@/actions";
+import { getProductBySlug } from "@/actions";
 import { AddToCart } from "./ui/AddToCart";
 
 interface Props {
@@ -27,7 +27,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const slug = params.slug;
 
-  const product = await getProductsBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   return {
     title: product?.title,
@@ -43,7 +43,7 @@ export async function generateMetadata(
 
 export default async function ({ params }: Props) {
   const { slug } = params;
-  const product = await getProductsBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();

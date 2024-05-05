@@ -1,29 +1,22 @@
 "use server";
 import prisma from "@/lib/prisma";
 
-export const getProductsBySlug = async (slug: string) => {
+export const getProductBySlug = async (slug: string) => {
   try {
     const product = await prisma.product.findFirst({
       include: {
-        ProductImage: {
-          select: {
-            url: true,
-          },
-        },
+        ProductImage: true,
       },
 
       where: {
-        slug: slug,
+        slug,
       },
     });
 
     if (!product) return null;
 
-    // Excluir el ProductImage del tipado de product
-    const { ProductImage, ...rest } = product;
-
     return {
-      ...rest,
+      ...product,
       images: product.ProductImage.map((image) => image.url),
     };
   } catch (error) {
