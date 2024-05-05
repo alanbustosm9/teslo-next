@@ -13,8 +13,6 @@ export default async function () {
     redirect("/auth/login");
   }
 
-  // TODO: AGREGAR UNA PAGINACION USE SERVER DE PRODUCTO
-
   // todo: agregar filtro
 
   return (
@@ -24,8 +22,7 @@ export default async function () {
       <div className="mb-10">
         <UsersTable users={users} />
 
-        {/* TODO: Arreglar este pagination */}
-        <Pagination totalPages={3} />
+        <Pagination totalPages={users.length} />
       </div>
     </>
   );

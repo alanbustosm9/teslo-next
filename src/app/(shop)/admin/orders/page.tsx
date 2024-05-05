@@ -1,5 +1,5 @@
 import { getPaginatedOrders } from "@/actions";
-import { Title } from "@/components";
+import { Pagination, Title } from "@/components";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -11,8 +11,6 @@ export default async function () {
   if (!ok) {
     redirect("/auth/login");
   }
-
-  // TODO: AGREGAR UNA PAGINACION USE SERVER DE PRODUCTO
 
   // todo: agregar filtro
 
@@ -87,6 +85,8 @@ export default async function () {
             ))}
           </tbody>
         </table>
+
+        <Pagination totalPages={orders.length} />
       </div>
     </>
   );

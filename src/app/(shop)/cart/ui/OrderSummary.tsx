@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { useCartStore } from "@/store";
-import { currencyFormat } from "@/utils";
+import { OrderCheckout } from "@/components";
 
 export const OrderSummary = () => {
   const { totalItems, tax, total, subTotal } = useCartStore((state) =>
@@ -23,23 +23,12 @@ export const OrderSummary = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2">
-        <span>No. Productos</span>
-        <span className="text-right">
-          {totalItems === 1 ? "1 articulo" : `${totalItems} articulos`}
-        </span>
-
-        <span>Subtotal</span>
-        <span className="text-right">{currencyFormat(subTotal)}</span>
-
-        <span>Impuestos (15%)</span>
-        <span className="text-right">{currencyFormat(tax)}</span>
-
-        <span className="mt-5 text-2xl">Total:</span>
-        <span className="mt-5 text-2xl text-right">
-          {currencyFormat(total)}
-        </span>
-      </div>
+        <OrderCheckout
+          totalItems={totalItems}
+          subTotal={subTotal}
+          tax={tax}
+          total={total}
+        />
     </>
   );
 };

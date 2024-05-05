@@ -11,7 +11,6 @@ export const setTransactionId = async (
       where: { id: orderId },
       data: {
         transactionId,
-        // isPaid: true,
       },
     });
 

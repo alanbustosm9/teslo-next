@@ -20,4 +20,6 @@ export * from "./providers/Providers";
 
 export * from "./paypal/PayPalButton";
 
-export * from "./orders/OrderStatus";
+export * from "./orders/order-status/OrderStatus";
+export * from "./orders/order-checkout/OrderCheckout";
+export * from "./orders/order-address/OrderAddress";

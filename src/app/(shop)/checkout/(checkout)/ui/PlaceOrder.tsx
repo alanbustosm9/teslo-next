@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 import { useAddressStore, useCartStore } from "@/store";
-import { currencyFormat, sleep } from "@/utils";
 import { placeOrder } from "@/actions";
+import { OrderAddress, OrderCheckout } from "@/components";
 
 export const PlaceOrder = () => {
   const router = useRouter();
@@ -55,46 +55,18 @@ export const PlaceOrder = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-xl p-7">
-      <h2 className="text-2xl mb-2">Dirección de entrega</h2>
-      {/* TODO: HACER COMPONENTE REUTILIZABLE DE ESTO */}
-      <div className="mb-10">
-        <p className="text-xl">
-          {address.firstName} {address.lastName}
-        </p>
-        <p>{address.address}</p>
-        <p>{address.address2}</p>
-        <p>{address.postalCode}</p>
-        <p>
-          {address.city}, {address.country}
-        </p>
-        <p>{address.phone}</p>
-      </div>
+      <OrderAddress address={address} />
 
       {/* Divider */}
-      <div className="w-full h-0.5 rounded bg-gray-200 mb-10" />
+      <div className="w-full h-0.5 rounded bg-gray-200 mb-6" />
 
       {/* Checkout */}
-
-      {/* TODO: HACER COMPONENTE REUTILIZABLE DE ESTO */}
-      <h2 className="text-2xl mb-2">Resumen de orden</h2>
-
-      <div className="grid grid-cols-2">
-        <span>No. Productos</span>
-        <span className="text-right">
-          {totalItems === 1 ? "1 articulo" : `${totalItems} articulos`}
-        </span>
-
-        <span>Subtotal</span>
-        <span className="text-right">{currencyFormat(subTotal)}</span>
-
-        <span>Impuestos (15%)</span>
-        <span className="text-right">{currencyFormat(tax)}</span>
-
-        <span className="mt-5 text-2xl">Total:</span>
-        <span className="mt-5 text-2xl text-right">
-          {currencyFormat(total)}
-        </span>
-      </div>
+      <OrderCheckout
+        totalItems={totalItems}
+        subTotal={subTotal}
+        tax={tax}
+        total={total}
+      />
 
       <div className="mt-5 mb-2 w-full">
         <p className="mb-5">

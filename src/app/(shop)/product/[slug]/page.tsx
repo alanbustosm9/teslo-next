@@ -35,7 +35,6 @@ export async function generateMetadata(
     openGraph: {
       title: product?.title,
       description: product?.description,
-      // todo: agregar el url de la imagen
       images: [`/products/${product?.images[1]}`],
     },
   };

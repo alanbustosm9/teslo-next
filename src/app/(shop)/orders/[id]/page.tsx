@@ -2,7 +2,14 @@ import { redirect } from "next/navigation";
 
 import { getOrderById } from "@/actions";
 import { currencyFormat } from "@/utils";
-import { OrderStatus, PaypalButton, ProductImage, Title } from "@/components";
+import {
+  OrderAddress,
+  OrderCheckout,
+  OrderStatus,
+  PaypalButton,
+  ProductImage,
+  Title,
+} from "@/components";
 
 interface Props {
   params: {
@@ -20,6 +27,14 @@ export default async function ({ params }: Props) {
   }
 
   const address = order!.OrderAddress;
+
+  const { id: addressId, orderId, countryId, ...rest} = address!
+
+  const newAddress = {
+    ...rest,
+    country: countryId,
+  };
+
 
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
@@ -60,48 +75,21 @@ export default async function ({ params }: Props) {
 
           {/* Summary */}
           <div className="bg-white rounded-xl shadow-xl p-7">
-            <h2 className="text-2xl mb-2">Dirección de entrega</h2>
-            <div className="mb-10">
-              <p className="text-xl">
-                {address!.firstName} {address!.lastName}
-              </p>
-              <p>{address!.address}</p>
-              <p>{address!.address2}</p>
-              <p>{address!.postalCode}</p>
-              <p>
-                {address!.city}, {address!.countryId}
-              </p>
-              <p>{address!.phone}</p>
-            </div>
+           <OrderAddress address={newAddress} />
+
+       
 
             {/* Divider */}
-            <div className="w-full h-0.5 rounded bg-gray-200 mb-10" />
+            <div className="w-full h-0.5 rounded bg-gray-200 mb-6" />
 
             {/* Checkout */}
 
-            <h2 className="text-2xl mb-2">Resumen de orden</h2>
-
-            <div className="grid grid-cols-2">
-              <span>No. Productos</span>
-              <span className="text-right">
-                {order?.itemsInOrder === 1
-                  ? "1 articulo"
-                  : `${order?.itemsInOrder} articulos`}
-              </span>
-
-              <span>Subtotal</span>
-              <span className="text-right">
-                {currencyFormat(order!.subTotal)}
-              </span>
-
-              <span>Impuestos (15%)</span>
-              <span className="text-right">{currencyFormat(order!.tax)}</span>
-
-              <span className="mt-5 text-2xl">Total:</span>
-              <span className="mt-5 text-2xl text-right">
-                {currencyFormat(order!.total)}
-              </span>
-            </div>
+            <OrderCheckout
+              totalItems={order!.itemsInOrder}
+              subTotal={order!.subTotal}
+              tax={order!.tax}
+              total={order!.total}
+            />
 
             <div className="mt-5 mb-2 w-full">
               {order?.isPaid ? (

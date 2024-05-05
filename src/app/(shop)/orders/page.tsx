@@ -12,8 +12,6 @@ export default async function () {
     redirect("/auth/login");
   }
 
-  // TODO: AGREGAR UNA PAGINACION USE SERVER DE PRODUCTO
-
   return (
     <>
       <Title title="Orders" />
