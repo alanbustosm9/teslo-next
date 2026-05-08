@@ -1,11 +1,12 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode, Pagination } from "swiper/modules";
+import { Autoplay, FreeMode, Navigation, Pagination } from "swiper/modules";
 import { ProductImage } from "../ProductImage/ProductImage";
 
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import "./slideshow.css";
@@ -29,7 +30,7 @@ export const ProductMobileSlideShow = ({ images, title, className }: Props) => {
         autoplay={{
           delay: 2500,
         }}
-        modules={[FreeMode, Autoplay, Pagination]}
+        modules={[FreeMode, Autoplay, Navigation, Pagination]}
         className="mySwiper2"
       >
         {images.map((image) => (
